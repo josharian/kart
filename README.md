@@ -4,4 +4,4 @@ Demo toy, to show off concurrency, interfaces, other fun.
 
 Nothing to see here yet.
 
-// TODO: Tests, godoc, change TODOs to "MORE FUN"
+// TODO: Tests, godoc, change TODOs to "MORE FUN", go get instructions, other dev setup instructions
