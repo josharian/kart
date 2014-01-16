@@ -1,11 +1,11 @@
 # (Go) Kart
 
 Kart is a simple speed-typing race. It is meant to be used
-in demos / workshows. Kart was designed to show a few
+in demos / workshops. Kart was designed to show a few
 interesting aspects of Go, particularly concurrency and interfaces.
 
-Suggestions for experimentation and alteration, ranging from
-small to large, are marked with "MORE FUN" in the code.
+Suggestions for further experimentation and alteration (ranging from
+small to large) are marked with "MORE FUN".
 
 To run (and hack on) Kart:
 
