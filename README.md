@@ -22,4 +22,4 @@ To run (and hack on) Kart:
 
 [Get set...](http://golang.org/doc/gopher/pencil/gopherswrench.jpg)
 
-[Go!]()("http://golang.org/doc/gopher/pencil/gopherrunning.jpg")
+[Go!]("http://golang.org/doc/gopher/pencil/gopherrunning.jpg")
