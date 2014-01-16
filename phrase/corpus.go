@@ -7,8 +7,11 @@ import (
 	"math/rand"
 )
 
+// Corpus is a list of phrases to select from.
 type Corpus []string
 
+// NewCorpus reads a corpus from r. Phrases
+// in r are separated by newlines.
 func NewCorpus(r io.Reader) (Corpus, error) {
 	c := make(Corpus, 0)
 	scanner := bufio.NewScanner(r)
@@ -24,6 +27,7 @@ func NewCorpus(r io.Reader) (Corpus, error) {
 	return c, nil
 }
 
+// Phrase returns a randomly selected phrase from c.
 func (c Corpus) Phrase() string {
 	return c[rand.Intn(len(c))]
 }

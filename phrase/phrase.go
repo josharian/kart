@@ -3,16 +3,16 @@ package phrase
 
 import "strings"
 
+// Source is a source of phrases.
 type Source interface {
 	Phrase() string
 }
 
+// Clean returns a Source that cleans phrases returned
+// by s. Cleaning consists of trimming leading and
+// trailing whitespace and removes non-ascii characters.
 func Clean(s Source) Source {
 	return &clean{src: s}
-}
-
-func Shout(s Source) Source {
-	return &shout{src: s}
 }
 
 type clean struct {
@@ -22,7 +22,6 @@ type clean struct {
 func (c *clean) Phrase() string {
 	w := c.src.Phrase()
 	w = strings.TrimSpace(w)
-	w = strings.Replace(w, "  ", " ", -1)
 	asciiOnly := func(r rune) rune {
 		if r > 127 {
 			return -1
@@ -30,16 +29,24 @@ func (c *clean) Phrase() string {
 		return r
 	}
 	w = strings.Map(asciiOnly, w)
-	if len(w) > 15 {
-		w = w[:15]
-	}
 	return w
 }
 
-type shout struct {
-	src Source
+// Truncate returns a Source that truncates phrases
+// returned by s at a maximum length of l.
+func Truncate(s Source, l int) Source {
+	return &truncate{src: s, length: l}
 }
 
-func (s *shout) Phrase() string {
-	return strings.ToUpper(s.src.Phrase())
+type truncate struct {
+	src    Source
+	length int
+}
+
+func (t *truncate) Phrase() string {
+	w := t.src.Phrase()
+	if len(w) > t.length {
+		w = w[:t.length]
+	}
+	return w
 }

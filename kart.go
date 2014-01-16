@@ -1,3 +1,5 @@
+// Kart is a speed-typing game. It is meant to demo
+// a few interesting aspects of Go.
 package main
 
 import (
@@ -13,10 +15,10 @@ import (
 )
 
 var (
+	// MORE FUN: More interesting sources of phrases
 	corpus = flag.String("corpus", "", "corpus to select phrases from; if not provided, phrases will be randomly generated")
 	port   = flag.Int("port", 11235, "port to listen on; defaults to 11235")
 	seed   = flag.Int64("seed", time.Now().UTC().UnixNano(), "random seed; defaults to current ns timestamp")
-	shout  = flag.Bool("shout", false, "SHOUT ALL THE PHRASES")
 )
 
 func main() {
@@ -25,22 +27,13 @@ func main() {
 
 	var src phrase.Source
 	if *corpus != "" {
-		f, err := os.Open(*corpus)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		defer f.Close()
-		src, err = phrase.NewCorpus(f)
+		src = loadCorpus(*corpus)
 	} else {
 		src = &phrase.Rand{Chars: "abcdef", Length: 9}
 	}
 
-	if *shout {
-		src = phrase.Shout(src)
-	}
-
 	src = phrase.Clean(src)
-	// TODO: More phrase fun?
+	src = phrase.Truncate(src, 15) // keep phrases from getting too long
 
 	ip, err := guessLocalIp4()
 	if err != nil {
@@ -48,21 +41,28 @@ func main() {
 	}
 	// log.Printf("Going to listen on %v:%v", ip, Port)
 
-	// TODO: Play over socket, UDP, or other net.Listener
+	// MORE FUN: Support playing over a socket, UDP, or some other net.Listener.
+	// MORE FUN: Instead of using a direct net.Conn, serve html over http, and
+	// use ajax to do interactive communication.
+	// MORE FUN: To be really twisted, serve html over http, and wrap up the
+	// ajax-based interactions into a net.Listener.
 	listen, err := net.ListenTCP("tcp4", &net.TCPAddr{Port: *port})
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 	log.Printf("To play: telnet %v %v", ip, *port)
 
-	// TODO: Accept arbitrarily many players; use a timeout + select?
-	// TODO: Be more robust here; when a player's connection causes an error,
-	// don't stop the game, just drop that player from the running.
-	// TODO: Instead of having a server, play peer-to-peer!
+	// MORE FUN: Instead of two, set the number of players on the command line.
+	// MORE FUN: Instead of a fixed number, accept players for a fixed
+	// time at start-up, and then play.
+	// MORE FUN: Be more robust. When one player's connection has a communication
+	// error, don't stop the game. Instead, just drop that player from the running.
+	// MORE FUN: Instead of having a client/server model, play peer-to-peer!
 
 	var pp []*Player
 	playerc := make(chan *Player)
 
+	// Listen for players
 	for i := 0; i < 2; i++ {
 		go func() {
 			p, err := AcceptPlayer(listen)
@@ -73,15 +73,18 @@ func main() {
 		}()
 	}
 
+	// Wait until we have two players
 	for i := 0; i < 2; i++ {
 		p := <-playerc
 		pp = append(pp, p)
 	}
 
+	// Select a phrase to send
 	w := src.Phrase()
 	log.Printf("Time to play! Sending the players (%v) the phrase: %s", pp, w)
-	winnerc := make(chan *Player)
 
+	// Send the phrase to all the players
+	winnerc := make(chan *Player)
 	for _, p := range pp {
 		go func(p *Player) {
 			if err := p.Race(w); err != nil {
@@ -91,19 +94,38 @@ func main() {
 		}(p)
 	}
 
+	// The first one to reply wins
 	p := <-winnerc
 	log.Printf("We have a winner! Congrats, %v!", p.Name)
 
-	// TODO: Send consolation messages to everyone else, instead of
+	// MORE FUN: Send consolation messages to everyone else, instead of
 	// just hanging up on them.
-	// TODO: Start a new game instead of exiting. We'll need to make
-	// sure we close the old connections.
+	// MORE FUN: Start a new game instead of exiting. We'll need to make
+	// sure we close the old connections (or reuse them), don't leak
+	// channels, etc. Maybe also start to gather and report statistics.
+	// Stats might also make solo mode fun.
+}
+
+// loadCorpus loads a corpus from the file at path;
+// in case of error, loadCorpus calls log.Fatal.
+func loadCorpus(path string) phrase.Corpus {
+	f, err := os.Open(path)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer f.Close()
+	src, err := phrase.NewCorpus(f)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return src
 }
 
 // guessLocalIp4 tries to deduce the local ipv4 address.
-// The goal of using it instead of just ifconfig is to ward
-// off the wrath of the demo gods by keeping everything in
-// one place.
+// We could just use ifconfig, but that's inelegant, and
+// this isn't hard. Also, network config changes is one
+// of the tricks used by jealous demo gods to wreak
+// vengeance on unsuspecting presenters.
 func guessLocalIp4() (net.IP, error) {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
