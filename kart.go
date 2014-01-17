@@ -40,7 +40,7 @@ func main() {
 	}
 	// log.Printf("Going to listen on %v:%v", ip, Port)
 
-	listen, err := net.ListenTCP("tcp4", &net.TCPAddr{Port: *port})
+	listen, err := net.ListenTCP("tcp4", &net.TCPAddr{IP: net.IPv4zero, Port: *port})
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
