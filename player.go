@@ -41,16 +41,6 @@ func AcceptPlayer(listen net.Listener) (p *Player, err error) {
 
 // Race gives phrase to the player and blocks until the
 // player successfully repeats that phrase back to us.
-//
-// MORE FUN: Instead of doing line-based buffering, do
-// character-by-character interaction. This would probably need
-// a client to play, rather than telnet. Once this is in place,
-// maybe show everyone everyone else's progress.
-//
-// MORE FUN: Some other game mechanism entirely?
-//
-// MORE FUN: Cheating prevention. Put in some heuristics
-// to detect that it is a human playing instead of a computer.
 func (p *Player) Race(phrase string) error {
 	var reply string
 	var err error
