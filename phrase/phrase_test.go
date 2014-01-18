@@ -19,9 +19,8 @@ func TestClean(t *testing.T) {
 
 	for _, tt := range cases {
 		c := Clean(phrase(tt.in))
-		have := c.Phrase()
-		if have != tt.want {
-			t.Errorf("clean %q want %q have %q", tt.in, tt.want, have)
+		if have := c.Phrase(); have != tt.want {
+			t.Errorf("clean %q: want %q have %q", tt.in, tt.want, have)
 		}
 	}
 }
@@ -44,7 +43,7 @@ func TestTruncate(t *testing.T) {
 		c := Truncate(phrase(tt.in), tt.length)
 		have := c.Phrase()
 		if have != tt.want {
-			t.Errorf("truncate %q want %q have %q", tt.in, tt.want, have)
+			t.Errorf("truncate %q: want %q have %q", tt.in, tt.want, have)
 		}
 	}
 }
