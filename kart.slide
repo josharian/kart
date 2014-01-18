@@ -1,0 +1,145 @@
+Hello, Gopher
+
+Josh Bleecher Snyder and Brent Fitzgerald
+card.io / PayPal
+
+* I can haz cheeztuber?
+
+.image http://golang.org/doc/gopher/pencil/gophermega.jpg 548 663 
+
+
+* Plan
+
+- Talk a bit about Go
+
+- Demo
+
+- Look at some code (github.com/josharian/kart)
+
+- Hack on the demo
+
+
+* Caveat audiens
+
+Languages:
+
+- Are acquired tastes
+
+- Have personalities
+
+- Are *not* fungible and are *not* "just tools"
+
+Remember: Friends don't let friends argue with strangers on the internet.
+
+
+* Go skydive
+
+- Pragmatic
+# normal/common challenges in modern development, amazing stdlib + packages (net/http, html/template, encoding/json), doesn't stand on theory, utf8
+
+- Designed to scale
+# ...in number of developers, size of code base, and (of course) workload; compile + run faster than python interpreter starts
+
+- Small, simple
+# spec 11 pages; C++ spec in 2005 is 879 pages
+
+- Unix-y
+# "Worse is better", modularity
+
+
+* Demo
+
+I hope it works this time! (Will I _ever_ learn not to do networking-based demos?)
+
+.image http://golang.org/doc/gopher/pencil/gopherrunning.jpg 207 207
+.image http://golang.org/doc/gopher/pencil/gopherrunning.jpg 207 207
+
+
+* Show me some code already!
+
+
+* Interfaces
+
+- Typesafe duck typing
+
+.code phrase/phrase.go /^type Source/,/^}/
+
+
+* Interfaces
+
+- Don't need to declare conformance to interfaces
+# no need to touch third party code; why type more when the compiler can do it for you; less verbose
+
+.code phrase/rand.go /^type Rand/,/^}/
+.code phrase/rand.go /^func .* Phrase/,/^}/
+
+
+* Interfaces
+
+- Encourages composition and reuse
+# net, net/http, throttled writer, retrying/coalescing loggers
+
+.code phrase/phrase.go /^type truncate/,/^}/
+.code phrase/phrase.go /^func.*truncate.*Phrase/,/^}/
+.code phrase/phrase.go /^func Truncate/,/^}/
+
+
+* Interfaces
+
+- Great for testing
+
+.code phrase/phrase_test.go /^type phrase/,/string/
+.code phrase/phrase_test.go /^func.*phrase.*Phrase/,/}$/
+.code phrase/phrase_test.go /^func TestClean/,/^}/
+
+
+* Concurrency
+
+- Goroutines + channels
+# cheap, lightweight, efficiently scheduled, CSP drawings
+# easily handle common real-world scenarios with obviously correct code
+
+.code kart.go /var pp/,/chan \*Player/
+.code kart.go /Listen for/,/^\t}/
+.code kart.go /Wait until/,/^\t}/
+
+
+* Concurrency
+
+- Goroutines + channels
+
+.code kart.go /Send the phrase/,/^\t}/
+.code kart.go /The first one to reply/,/winnerc/
+
+
+* Tooling
+
+.image http://golang.org/doc/gopher/pencil/gopherswrench.jpg 578 877
+
+
+* Tooling
+# yay re-use -- don't need to reinvent for emacs, vi, IDEs, etc.
+
+- gofmt
+
+- go test
+
+
+* Learn more
+
+- golang.org
+
+- go-nuts google group
+
+
+* Etc
+
+- Not OO; embedding
+
+- Name-then-type, not type-then-name
+
+- Defer
+
+- Errors not exceptions
+
+- Slices
