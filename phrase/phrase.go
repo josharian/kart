@@ -33,9 +33,9 @@ func (c *clean) Phrase() string {
 }
 
 // Truncate returns a Source that truncates phrases
-// returned by s at a maximum length of l.
-func Truncate(s Source, l int) Source {
-	return &truncate{src: s, length: l}
+// returned by s at a maximum length.
+func Truncate(s Source, length int) Source {
+	return &truncate{src: s, length: length}
 }
 
 type truncate struct {
