@@ -18,6 +18,13 @@ To run (and hack on) Kart:
 * Build: `go build *.go`
 * Run: `./kart`
 
+To view the accompanying slides locally:
+
+* `go get code.google.com/p/go.talks/present`
+* `cd $GOPATH/src/github.com/josharian/kart`
+* `$GOPATH/bin/present`
+* `open http://localhost:3999/kart.slide`
+
 [On your mark...](http://golang.org/doc/gopher/pencil/gophermega.jpg)
 
 [Get set...](http://golang.org/doc/gopher/pencil/gopherswrench.jpg)
