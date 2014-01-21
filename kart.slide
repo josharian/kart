@@ -109,7 +109,7 @@ I hope it works this time! (Will I _ever_ learn not to do networking-based demos
 - Goroutines + channels
 
 .code kart.go /Send the phrase/,/^\t}/
-.code kart.go /The first one to reply/,/winnerc/
+.code kart.go /The first one to reply/,/winnerc /
 
 
 * Tooling
